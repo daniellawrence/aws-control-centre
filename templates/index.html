@@ -1,0 +1,16 @@
+<html>
+<body>
+  <h1>Instance list</h1>
+{% for r in instance_list %}
+{% for instance in r.instances %}
+{% for tag_name, tag_value in instance.tags.iteritems() %}
+  <strong>{{tag_name}}</strong>
+  {{tag_value}}
+  <Br />
+{% endfor %}
+  <a href='/instance/{{instance.id}}/stop'>stop</a>
+  <a href='/instance/{{instance.id}}/start'>start</a>
+  <a href='/instance/{{instance.id}}/start'>reboot</a>
+  <Hr />
+{% endfor %}
+{% endfor %}
