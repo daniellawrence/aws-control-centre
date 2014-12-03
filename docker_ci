@@ -1,0 +1,11 @@
+#!/bin/bash
+
+cd $(dirname $0)
+
+
+docker build -q -t fabric-ci .
+C=$(docker run -d -t fabric-ci)
+docker attach $C
+RC=$?
+docker wait $C
+exit $RC

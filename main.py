@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 from flask import Flask
 from functools import wraps
-from flask import request, Response, session, redirect, url_for, render_template
+from flask import request, Response, session, redirect, url_for, \
+    render_template
 from boto import ec2
 
 
@@ -39,9 +40,9 @@ def check_auth(username, password):
 def authenticate():
     """Sends a 401 response that enables basic auth"""
     return Response(
-    'Could not verify your access level for that URL.\n'
-    'You have to login with proper credentials', 401,
-    {'WWW-Authenticate': 'Basic realm="Login Required"'})
+        'Could not verify your access level for that URL.\n'
+        'You have to login with proper credentials', 401,
+        {'WWW-Authenticate': 'Basic realm="Login Required"'})
 
 
 def requires_auth(f):
@@ -71,7 +72,7 @@ def instances():
     aws_connection = connect_to_region()
     instance_list = aws_connection.get_all_instances()
     return render_template(
-        'index.html', 
+        'index.html',
         instance_list=instance_list, username=session['username']
     )
 
@@ -80,10 +81,12 @@ def instances():
 @requires_auth
 def instances_action(instance_id, action):
     aws_connection = connect_to_region()
-    instance = aws_connection.get_all_instances(instance_ids=[instance_id])[0].instances[0]
+    instance = aws_connection.get_all_instances(
+        instance_ids=[instance_id]
+    )[0].instances[0]
     print(dir(instance))
     return render_template(
-        'instance_action.html', 
+        'instance_action.html',
         instance=instance,
         action=action,
         instance_id=instance_id
