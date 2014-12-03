@@ -95,6 +95,22 @@ def instances_action(instance_id, action):
 def index():
     return redirect(url_for('instances'))
 
+
+def validate_tags(user_tags, machine_tags):
+    REQUIRED_MATCHES = len(user_tags.keys())
+    TAG_MATCHES = 0
+    for mtag, mval in machine_tags.items():
+        if mtag in user_tags:
+            uval = user_tags[mtag]
+            if isinstance(uval, str):
+                uval = [uval]
+            if mval in uval:
+                TAG_MATCHES += 1
+
+    if TAG_MATCHES == REQUIRED_MATCHES:
+        return True
+    return False
+
 if __name__ == "__main__":
     app.debug = True
     app.host = '0.0.0.0'
