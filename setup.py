@@ -2,9 +2,9 @@ from setuptools import setup, find_packages
 
 version = '0.0.1'
 
-setup(name='mhs.fab',
+setup(name='aws.cc',
       version=version,
-      description="Nagios generation for MHS infrastructure.",
+      description="AWS Hacks.",
       classifiers=[
           "Programming Language :: Python",
       ],

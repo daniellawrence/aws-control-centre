@@ -1,16 +1,33 @@
-<html>
-<body>
-  <h1>Instance list</h1>
-{% for r in instance_list %}
-{% for instance in r.instances %}
-{% for tag_name, tag_value in instance.tags.iteritems() %}
-  <strong>{{tag_name}}</strong>
-  {{tag_value}}
-  <Br />
+{% extends "base.html" %}
+{% block content %}
+
+<h1>Instance list</h1>
+<h3>Crash&Burn and scratch hosts</h3>
+<table class="table">
+  <tr>
+      <th>Name</th>
+      <th>App</th>
+      <th>Cost Centre</th>
+      <th>Environment</th>
+      <th>Availability</th>
+      <th>Action</th>
+  </tr>
+{% for instance in instance_list %}
+  <tr>
+      <td>{{instance.tags['Name']}}</td>
+      <td>{{instance.tags['AppName']}}</td>
+      <td>{{instance.tags['CostCentre']}}</td>
+      <td>{{instance.tags['Environment']}}</td>
+      <td>{{instance.tags['Availability']}}</td>
+      <td>
+	  {% if instance.state == "running" %}
+	  <a href='/instance/{{instance.id}}/stop'>stop</a>
+	  <a href='/instance/{{instance.id}}/start'>reboot</a>
+	  {% else %}
+	  <a href='/instance/{{instance.id}}/start'>start</a>
+	  {% endif %}
+      </td>
+  </tr>
 {% endfor %}
-  <a href='/instance/{{instance.id}}/stop'>stop</a>
-  <a href='/instance/{{instance.id}}/start'>start</a>
-  <a href='/instance/{{instance.id}}/start'>reboot</a>
-  <Hr />
-{% endfor %}
-{% endfor %}
+</table>
+{% endblock %}

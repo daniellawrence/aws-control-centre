@@ -1,6 +1,6 @@
 import pytest
 
-from main import validate_tags
+from app import validate_tags
 
 
 @pytest.mark.parametrize(
