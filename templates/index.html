@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h1>Instance list</h1>
+<h1>{{session['user_name']}} Instance list</h1>
 <h3>Crash&Burn and scratch hosts</h3>
 <table class="table">
   <tr>
@@ -21,10 +21,9 @@
       <td>{{instance.tags['Availability']}}</td>
       <td>
 	  {% if instance.state == "running" %}
-	  <a href='/instance/{{instance.id}}/stop'>stop</a>
-	  <a href='/instance/{{instance.id}}/start'>reboot</a>
+	  <a href='/instance/{{instance.id}}/stop' class='btn btn-danger' ">stop</a>
 	  {% else %}
-	  <a href='/instance/{{instance.id}}/start'>start</a>
+	  <a href='/instance/{{instance.id}}/start' class="btn btn-success">start</a>
 	  {% endif %}
       </td>
   </tr>

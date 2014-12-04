@@ -3,25 +3,10 @@ from flask import Flask
 from functools import wraps
 from flask import request, Response, session, redirect, url_for, \
     render_template
-
 from boto import ec2, iam
-
 
 app = Flask(__name__)
 app.region_name = 'ap-southeast-2'
-
-
-def memoize(f):
-    """ Memoization decorator for functions taking one or more arguments. """
-    class memodict(dict):
-        def __init__(self, f):
-            self.f = f
-        def __call__(self, *args):
-            return self[args]
-        def __missing__(self, key):
-            ret = self[key] = self.f(*key)
-            return ret
-    return memodict(f)
 
 
 def connect_to_region():
@@ -39,7 +24,7 @@ def connect_to_region():
         is_secure=True,
         validate_certs=False
     )
-    user_data = iam_connection.get_user()
+    user_data = iam_connection.get_user()['get_user_response']['get_user_result']['user']
     session.update(user_data)
     return aws_connection
 
