@@ -8,6 +8,13 @@ from boto import ec2, iam
 app = Flask(__name__)
 app.region_name = 'ap-southeast-2'
 
+user_tags = {
+    'dlawrence-mbd': {
+        'CostCentre': ['scratch', 'crash&burn', 'foundation operations'],
+        'Environment': ['uplift', 'scratch', 'crash&burn'],
+    }
+}
+
 
 def connect_to_region():
     aws_connection = ec2.connect_to_region(
@@ -65,13 +72,14 @@ def requires_auth(f):
 
 @app.route("/logoff/")
 def logoff():
-    del session['username']
-    del session['password']
+    for session_key in ('username', 'password'):
+        if session_key in session:
+            del session[session_key]
+            session.pop(session_key, None)
+    session.clear()
     request.authorization = None
-    session.pop('username', None)
-    session.pop('password', None)
     return authenticate()
-    return redirect(url_for('index'))
+    # return redirect(url_for('index'))
 
 
 def get_all_instances():
@@ -81,9 +89,11 @@ def get_all_instances():
     for r in raw_instance_list:
         i = r.instances[0]
         if 'Environment' not in i.tags:
+            print("Skipping %s missing Environment" % i)
             continue
-        if i.tags['Environment'] not in ('scratch', 'crash&burn'):
-            continue
+        # if i.tags['Environment'] not in ('scratch', 'crash&burn'):
+        #    print("Skipping %s not scratch or crash&burn" % i)
+        #    continue
         instance_list.append(i)
     return instance_list
 
@@ -92,9 +102,16 @@ def get_all_instances():
 @requires_auth
 def instances():
     instance_list = get_all_instances()
+    my_user_tags = user_tags[session['user_name']]
+    instance_list = filter_resources_by_tag(
+        instance_list,
+        my_user_tags
+    )
     return render_template(
         'index.html',
-        instance_list=instance_list, username=session['username']
+        instance_list=instance_list,
+        username=session['username'],
+        my_user_tags=my_user_tags,
     )
 
 
@@ -105,7 +122,6 @@ def instances_action(instance_id, action):
     instance = aws_connection.get_all_instances(
         instance_ids=[instance_id]
     )[0].instances[0]
-    print(dir(instance))
     return render_template(
         'instance_action.html',
         instance=instance,
@@ -138,6 +154,8 @@ def validate_tags(user_tags, machine_tags):
                 uval = [uval]
             if mval in uval:
                 TAG_MATCHES += 1
+            print "is %s in %s, %s" % (mval, uval, mval in uval)
+    print
 
     if TAG_MATCHES == REQUIRED_MATCHES:
         return True

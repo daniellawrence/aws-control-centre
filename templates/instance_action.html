@@ -1,8 +1,11 @@
-<html>
-<body>
+{% extends "base.html" %}
+{% block content %}
+
   <h1>{{action}} Instance {{instance.id}}</h1>
-  <button>Confirm</button>
+  <Hr />
+  <button class='btn btn-danger btn-lg'>Confirm {{action}}</button>
   <Br />
-  <strong>instance type:</strong> {{instance.instance_type}}<Br />
-</body>
-</html>
+  {% for key, value in instance.__dict__.items() %}
+  <strong>{{key}}:</strong> {{value}}<Br />
+  {% endfor %}
+{% endblock %}

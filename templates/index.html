@@ -2,7 +2,9 @@
 {% block content %}
 
 <h1>{{session['user_name']}} Instance list</h1>
-<h3>Crash&Burn and scratch hosts</h3>
+{% for key, value in my_user_tags.items() %}
+<strong>{{key}}</strong>: {{value|join(', ')}}<Br />
+{% endfor %}
 <table class="table">
   <tr>
       <th>Name</th>
