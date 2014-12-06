@@ -1,11 +1,20 @@
 {% extends "base.html" %}
 {% block content %}
 
-  <h1>{{action}} Instance {{instance.id}}</h1>
+  <h1>{{action|title}} instance {{instance.tags['Name']}}</h1>
   <Hr />
-  <button class='btn btn-danger btn-lg'>Confirm {{action}}</button>
-  <Br />
-  {% for key, value in instance.__dict__.items() %}
-  <strong>{{key}}:</strong> {{value}}<Br />
-  {% endfor %}
+  <strong>ID:</strong> {{instance.id}}<Br />
+  <strong>Name:</strong> {{instance.tags['Name']}}<Br />
+  <strong>IP:</strong> {{instance.private_ip_address}}<Br />
+  <strong>Environment:</strong> {{instance.tags['Environment']}}<Br />
+  <strong>Application:</strong> {{instance.tags['AppName']}}<Br />
+  <strong>Cost Centre:</strong> {{instance.tags['CostCentre']}}<Br />
+  {% if action == "start" %}
+  <form method="post" action="#">
+      <input type="hidden" name="instance_id" value="{{instance.id}}"/>
+      <input type="submit" class='btn btn-success btn-lg btn-block'
+	     value="Confirm starting of instance {{instance.tags['Name']}}"
+	     />
+  </form>
+  {% endif %}
 {% endblock %}

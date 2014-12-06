@@ -1,34 +1,30 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h1>{{session['user_name']}} Instance list</h1>
-{% for key, value in my_user_tags.items() %}
-<strong>{{key}}</strong>: {{value|join(', ')}}<Br />
-{% endfor %}
-<table class="table">
-  <tr>
-      <th>Name</th>
-      <th>App</th>
-      <th>Cost Centre</th>
-      <th>Environment</th>
-      <th>Availability</th>
-      <th>Action</th>
-  </tr>
-{% for instance in instance_list %}
-  <tr>
-      <td>{{instance.tags['Name']}}</td>
-      <td>{{instance.tags['AppName']}}</td>
-      <td>{{instance.tags['CostCentre']}}</td>
-      <td>{{instance.tags['Environment']}}</td>
-      <td>{{instance.tags['Availability']}}</td>
-      <td>
-	  {% if instance.state == "running" %}
-	  <a href='/instance/{{instance.id}}/stop' class='btn btn-danger' ">stop</a>
-	  {% else %}
-	  <a href='/instance/{{instance.id}}/start' class="btn btn-success">start</a>
-	  {% endif %}
-      </td>
-  </tr>
-{% endfor %}
-</table>
+<h1>AWS Control Centre</h1>
+You will need your API key information for AWS in order to use this service.
+<Hr />
+<div class="list-group">
+  <a href="/instance/"" class="list-group-item">
+    <h4 class="list-group-item-heading">AWS Instance list</h4>
+    <p class="list-group-item-text">
+	Start up instances that have been shutdown overnight.
+	<Br />
+	You will only be shown instances you are allowed to start.
+	<Br />
+	You can only start instnaces, no destructive options here.
+    </p>
+  </a>
+  <!-- This should always be last -->
+  <a href="/admin/"" class="list-group-item">
+    <h4 class="list-group-item-heading">Control Centre Admin</h4>
+    <p class="list-group-item-text">
+	Control what the users are able to do.
+	<ul>
+	    <li>Grab users and tags from AWS</li>
+	    <li>Assign tags to users</li>
+	</ul>
+    </p>
+  </a>
+</div>
 {% endblock %}

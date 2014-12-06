@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>{{session['user_name']}} Instance list</h1>
+{% for key, value in my_user_tags.items() %}
+<strong>{{key}}</strong>: {{value|join(', ')}}<Br />
+{% endfor %}
+<table class="table">
+  <tr>
+      <th>Name</th>
+      <th>App</th>
+      <th>Cost Centre</th>
+      <th>Environment</th>
+      <th>Action</th>
+  </tr>
+{% for instance in instance_list %}
+  <tr>
+      <td>{{instance.tags['Name']}}</td>
+      <td>{{instance.tags['AppName']}}</td>
+      <td>{{instance.tags['CostCentre']}}</td>
+      <td>{{instance.tags['Environment']}}</td>
+      <td>
+	<a href='/instance/{{instance.id}}/start' class="btn btn-success">
+	  start
+	</a>
+      </td>
+  </tr>
+{% endfor %}
+</table>
+{% endblock %}
