@@ -13,7 +13,7 @@
       <th>Environment</th>
       <th>Action</th>
   </tr>
-{% for instance in instance_list %}
+{% for instance in instance_list if instance.state == "stopped" %}
   <tr>
       <td>{{instance.tags['Name']}}</td>
       <td>{{instance.tags['AppName']}}</td>
